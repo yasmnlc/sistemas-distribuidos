@@ -1,8 +1,7 @@
-# tcp_server.py
 import socket
 from streams import PlanoSaudeStreamReader, PlanoSaudeStreamWriter
 from pojo import PlanoIndividual
-from service import GestorPlanos  # Usa seu serviço original
+from service import GestorPlanos  # Usa serviço original
 
 # -----------------------------------------------------------------
 # ITEM 4: Servidor com Sockets e Serialização (Struct)
@@ -35,8 +34,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Bloco 'with' garante que o socket 'conn' será fechado no final
         with conn:
             print(f"Conectado por {addr}")
-            
-            # --- CORREÇÃO ---
             # "Embrulha" o socket 'conn' em objetos do tipo arquivo.
             # 'rb' = Read Binary (para leitura)
             # 'wb' = Write Binary (para escrita)
@@ -50,7 +47,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # Teste (3.d) e Item (4): Servidor desempacota request
             # -----------------------------------------------------------------
             print("Servidor: Aguardando dados do cliente...")
-            # Instancia o Reader, usando o 'file_reader' (e não o 'conn')
+            # Instancia o Reader, usando o 'file_reader'
             reader = PlanoSaudeStreamReader(file_reader)
             # Lê a lista de planos enviada pelo cliente
             planos_recebidos = reader.read_planos()
@@ -67,7 +64,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # Teste (2.b.iii) e Item (4): Servidor empacota reply
             # -----------------------------------------------------------------
             print("Servidor: Enviando lista atualizada de volta...")
-            # Instancia o Writer, usando o 'file_writer' (e não o 'conn')
+            # Instancia o Writer, usando o 'file_writer'
             writer = PlanoSaudeStreamWriter(file_writer)
             # Envia a lista COMPLETA de planos ativos como resposta
             writer.write_planos(gestor.planos_ativos)

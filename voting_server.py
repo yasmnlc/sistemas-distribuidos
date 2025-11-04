@@ -1,4 +1,3 @@
-# voting_server.py
 import socket
 import threading
 import json
@@ -7,11 +6,11 @@ import struct # Necessário para o setup do multicast
 
 # --- Configurações do Servidor ---
 HOST_TCP = '0.0.0.0'  # Ouve em todas as interfaces
-PORT_TCP = 50007      # Porta para TCP (Login, Votos) [cite: 41]
+PORT_TCP = 50007      # Porta para TCP (Login, Votos)
 
 # --- Configurações do Multicast (UDP) ---
 MCAST_GROUP = '224.1.1.1' # Endereço de grupo multicast
-MCAST_PORT = 50008        # Porta para UDP (Notas) [cite: 42]
+MCAST_PORT = 50008        # Porta para UDP (Notas) 
 
 # --- "Banco de Dados" Global (Simulado) ---
 # Dicionário de candidatos: {id: {"nome": "Nome"}}
@@ -29,7 +28,7 @@ usuarios = {
 }
 # Conjunto de usuários logados (para controle)
 usuarios_logados = set()
-# Flag para controlar o período de votação [cite: 38]
+# Flag para controlar o período de votação
 votacao_aberta = True
 # Lock para proteger o acesso às variáveis globais (necessário para multi-thread)
 data_lock = threading.Lock()
@@ -37,7 +36,7 @@ data_lock = threading.Lock()
 # --- Funções de Ajuda ---
 
 def enviar_nota_multicast(mensagem: str):
-    """Envia uma mensagem para o grupo multicast UDP. [cite: 42]"""
+    """Envia uma mensagem para o grupo multicast UDP."""
     print(f"MULTICAST: Enviando nota: '{mensagem}'")
     try:
         # Cria um socket UDP
@@ -51,7 +50,7 @@ def enviar_nota_multicast(mensagem: str):
         print(f"Erro ao enviar multicast: {e}")
 
 def encerrar_votacao(tempo_segundos: int):
-    """Thread timer que encerra a votação após um tempo. [cite: 38]"""
+    """Thread timer que encerra a votação após um tempo."""
     global votacao_aberta
     print(f"Votação será encerrada em {tempo_segundos} segundos.")
     # Aguarda o tempo definido
@@ -77,7 +76,7 @@ def encerrar_votacao(tempo_segundos: int):
 
 # --- Thread de Handler do Cliente (TCP) ---
 def handle_client_tcp(conn: socket.socket, addr):
-    """Função executada por thread para cada cliente TCP conectado. [cite: 42]"""
+    """Função executada por thread para cada cliente TCP conectado."""
     print(f"TCP: Nova conexão de {addr}")
     user_info = None # Armazena quem é este cliente
     
@@ -101,7 +100,7 @@ def handle_client_tcp(conn: socket.socket, addr):
             # Processa a 'acao' solicitada
             acao = request.get('acao')
             
-            # 1. Ação de Login (Votante e Admin) [cite: 39, 40]
+            # 1. Ação de Login (Votante e Admin)
             if acao == 'login':
                 username = request.get('usuario')
                 senha = request.get('senha')
@@ -122,14 +121,14 @@ def handle_client_tcp(conn: socket.socket, addr):
                 reply = {"status": "erro", "msg": "Não autenticado"}
                 conn.sendall(json.dumps(reply).encode('utf-8'))
 
-            # 2. Ação de Listar Candidatos (Votante) [cite: 39]
+            # 2. Ação de Listar Candidatos (Votante)
             elif acao == 'get_candidatos' and user_info['tipo'] == 'voter':
                 # Responde com a lista global de candidatos
                 with data_lock:
                     reply = {"status": "ok", "candidatos": candidatos}
                 conn.sendall(json.dumps(reply).encode('utf-8'))
 
-            # 3. Ação de Votar (Votante) [cite: 39]
+            # 3. Ação de Votar (Votante)
             elif acao == 'votar' and user_info['tipo'] == 'voter':
                 # Protege o acesso às flags e contagem de votos
                 with data_lock:
@@ -161,7 +160,7 @@ def handle_client_tcp(conn: socket.socket, addr):
                     reply = {"status": "erro", "msg": "Nome do candidato não fornecido"}
                 conn.sendall(json.dumps(reply).encode('utf-8'))
             
-            # 5. Ação de Enviar Nota (Admin) -> (Gera UDP Multicast) [cite: 40, 42]
+            # 5. Ação de Enviar Nota (Admin) -> (Gera UDP Multicast)
             elif acao == 'enviar_nota' and user_info['tipo'] == 'admin':
                 mensagem_nota = request.get('nota')
                 if mensagem_nota:
@@ -191,12 +190,12 @@ def handle_client_tcp(conn: socket.socket, addr):
 
 # --- Função Principal (Main) do Servidor ---
 def main():
-    # 1. Inicia a thread do timer da votação [cite: 38]
+    # 1. Inicia a thread do timer da votação
     # (Definido para 120 segundos = 2 minutos)
     timer_thread = threading.Thread(target=encerrar_votacao, args=(600,), daemon=True)
     timer_thread.start()
 
-    # 2. Configura e inicia o servidor TCP [cite: 41]
+    # 2. Configura e inicia o servidor TCP
     # (Usamos o 'with' para garantir que o socket será fechado)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tcp_socket:
         # Permite que o servidor re-use o endereço imediatamente
@@ -212,7 +211,7 @@ def main():
             try:
                 # Aceita uma nova conexão
                 conn, addr = tcp_socket.accept()
-                # Cria uma nova thread para cuidar desse cliente [cite: 42]
+                # Cria uma nova thread para cuidar desse cliente
                 client_thread = threading.Thread(target=handle_client_tcp, args=(conn, addr), daemon=True)
                 # Inicia a thread
                 client_thread.start()

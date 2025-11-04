@@ -1,4 +1,3 @@
-# tcp_client.py
 import socket
 from streams import PlanoSaudeStreamReader, PlanoSaudeStreamWriter
 from pojo import PlanoEmpresa  # Vamos enviar um PlanoEmpresa

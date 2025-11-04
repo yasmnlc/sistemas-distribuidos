@@ -1,4 +1,3 @@
-# streams.py
 import struct  # Para empacotar/desempacotar dados binários
 import sys     # Para usar stderr em mensagens de erro
 from typing import List, Any  # Para type hints (Any = qualquer tipo de stream)
@@ -9,14 +8,14 @@ from pojo import PlanoSaude   # Importa a classe base POJO e seus métodos
 # -----------------------------------------------------------------
 class PlanoSaudeStreamWriter:
     """
-    Equivalente Python do 'PojoEscolhidoOutputStream'[cite: 7].
+    Equivalente Python do 'PojoEscolhidoOutputStream'
     Esta classe escreve uma LISTA de objetos PlanoSaude em um 
     stream de destino (como um arquivo, socket, ou stdout).
     """
 
     def __init__(self, dest_stream: Any):
         """
-        Construtor. Recebe o stream de destino (Item 2.a.iv)[cite: 11].
+        Construtor. Recebe o stream de destino (Item 2.a.iv)
         :param dest_stream: Um objeto com método .write() (ex: arquivo, socket)
         """
         # (iv) Armazena o "OutputStream de destino"
@@ -28,10 +27,10 @@ class PlanoSaudeStreamWriter:
         Este método lida com os requisitos (i), (ii), e (iii) do Item 2.a.
         """
         try:
-            # (ii) Obtém o número de Objetos que serão enviados [cite: 10]
+            # (ii) Obtém o número de Objetos que serão enviados
             num_objetos = len(planos)
             
-            # (iii) Obtém o número de bytes de CADA objeto [cite: 11]
+            # (iii) Obtém o número de bytes de CADA objeto
             # Usamos o método estático que você já criou no pojo.py
             serial_size = PlanoSaude.get_serial_size()
 
@@ -43,7 +42,7 @@ class PlanoSaudeStreamWriter:
             # Escreve o cabeçalho no stream
             self.stream.write(header_bytes)
 
-            # 2. Escreve cada objeto da lista (Item 2.a.i) [cite: 9]
+            # 2. Escreve cada objeto da lista (Item 2.a.i)
             for plano in planos:
                 # Serializa o objeto POJO para bytes (usando seu método)
                 plano_bytes = plano.to_bytes()
@@ -62,14 +61,14 @@ class PlanoSaudeStreamWriter:
 # -----------------------------------------------------------------
 class PlanoSaudeStreamReader:
     """
-    Equivalente Python do 'PojoEscolhidoInputStream'[cite: 21].
+    Equivalente Python do 'PojoEscolhidoInputStream'.
     Esta classe lê uma LISTA de objetos PlanoSaude de um 
     stream de origem (como um arquivo, socket, ou stdin).
     """
 
     def __init__(self, source_stream: Any):
         """
-        Construtor. Recebe o stream de origem (Item 3.a)[cite: 23].
+        Construtor. Recebe o stream de origem (Item 3.a).
         :param source_stream: Um objeto com método .read() (ex: arquivo, socket)
         """
         # (a) Armazena o "InputStream de origem"

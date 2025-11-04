@@ -1,4 +1,3 @@
-# voting_client.py
 import socket
 import threading
 import json
@@ -63,7 +62,7 @@ def send_request(sock: socket.socket, request: dict) -> dict:
         return {"status": "erro", "msg": "Resposta corrompida do servidor"}
 
 def login(sock: socket.socket) -> bool:
-    """Tenta autenticar o usuário via TCP. [cite: 39]"""
+    """Tenta autenticar o usuário via TCP."""
     print("--- Login do Votante ---")
     usuario = input("Usuário: ")
     senha = input("Senha: ")
@@ -88,7 +87,7 @@ def main():
     multicast_thread = threading.Thread(target=listen_for_multicast_notes, daemon=True)
     multicast_thread.start()
 
-    # 2. Conecta ao servidor TCP [cite: 41]
+    # 2. Conecta ao servidor TCP
     try:
         # Cria o socket TCP
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -108,7 +107,7 @@ def main():
                 print("3. Sair")
                 escolha = input("> ")
 
-                # Opção 1: Listar Candidatos [cite: 39]
+                # Opção 1: Listar Candidatos
                 if escolha == '1':
                     req = {"acao": "get_candidatos"}
                     resp = send_request(sock, req)
@@ -119,7 +118,7 @@ def main():
                     else:
                         print(f"Erro: {resp.get('msg')}")
                 
-                # Opção 2: Votar [cite: 39]
+                # Opção 2: Votar
                 elif escolha == '2':
                     try:
                         id_voto = int(input("Digite o ID do candidato: "))

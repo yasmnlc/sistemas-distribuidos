@@ -1,4 +1,3 @@
-# voting_admin.py
 import socket
 import json
 import sys
@@ -65,7 +64,7 @@ def main():
                     resp = send_request(sock, req)
                     print(f"Resposta do Servidor: {resp.get('msg')}")
                 
-                # Opção 2: Enviar Nota (via TCP, que o servidor fará Multicast) [cite: 42]
+                # Opção 2: Enviar Nota (via TCP, que o servidor fará Multicast)
                 elif escolha == '2':
                     nota = input("Mensagem da nota: ")
                     req = {"acao": "enviar_nota", "nota": nota}

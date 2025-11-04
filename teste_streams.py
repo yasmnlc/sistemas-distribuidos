@@ -1,4 +1,3 @@
-# teste_streams.py
 import sys
 from pojo import PlanoEmpresa, PlanoIndividual
 from streams import PlanoSaudeStreamWriter, PlanoSaudeStreamReader
@@ -9,7 +8,7 @@ plano2 = PlanoIndividual(codigo=2, nome_plano="Individuo Comum", preco_base=150.
 meus_planos = [plano1, plano2]
 
 def testar_escrita_arquivo():
-    """Teste (ii): Escreve em um arquivo (FileOutputStream) [cite: 17]"""
+    """Teste (ii): Escreve em um arquivo (FileOutputStream)"""
     print("Testando (2.b.ii): Escrita para arquivo 'planos.bin'...")
     # 'wb' = Write Binary (equivale ao FileOutputStream)
     with open("planos.bin", "wb") as f:
@@ -20,7 +19,7 @@ def testar_escrita_arquivo():
     print("...Escrita no arquivo concluída.")
 
 def testar_leitura_arquivo():
-    """Teste (c): Lê de um arquivo (FileInputStream) [cite: 26]"""
+    """Teste (c): Lê de um arquivo (FileInputStream)"""
     print("\nTestando (3.c): Leitura do arquivo 'planos.bin'...")
     try:
         # 'rb' = Read Binary (equivale ao FileInputStream)
@@ -38,14 +37,14 @@ def testar_leitura_arquivo():
         print("Erro: execute o teste de escrita primeiro.")
 
 def testar_stdout_writer():
-    """Teste (i): Escreve na saída padrão (System.out) [cite: 15]"""
+    """Teste (i): Escreve na saída padrão (System.out)"""
     # sys.stdout.buffer é o stream binário (equivale ao System.out)
     writer_stdout = PlanoSaudeStreamWriter(sys.stdout.buffer)
     # Escreve os planos no stdout
     writer_stdout.write_planos(meus_planos)
 
 def testar_stdin_reader():
-    """Teste (b): Lê da entrada padrão (System.in) [cite: 25]"""
+    """Teste (b): Lê da entrada padrão (System.in)"""
     # sys.stdin.buffer é o stream binário (equivale ao System.in)
     reader_stdin = PlanoSaudeStreamReader(sys.stdin.buffer)
     # Lê os planos do stdin
