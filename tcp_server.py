@@ -13,7 +13,7 @@ gestor = GestorPlanos()
 gestor.adicionar_plano(PlanoIndividual(codigo=0, nome_plano="Plano Base Servidor", preco_base=100.0, is_ativo=True, cpf_titular="000"))
 
 # Configurações do servidor
-HOST = '127.0.0.1'  # Endereço IP (localhost)
+HOST = '0.0.0.0'  # Endereço IP (localhost 127.0.0.1)
 PORT = 65432        # Porta para ouvir
 
 # Cria o objeto socket TCP/IP

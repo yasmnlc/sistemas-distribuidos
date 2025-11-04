@@ -31,7 +31,7 @@ class PlanoSaudeStreamWriter:
             num_objetos = len(planos)
             
             # (iii) Obtém o número de bytes de CADA objeto
-            # Usamos o método estático que você já criou no pojo.py
+            # Usamos o método estático foi criado no pojo.py
             serial_size = PlanoSaude.get_serial_size()
 
             # 1. Escreve o Cabeçalho: (Número de objetos, Tamanho de cada objeto)
@@ -44,7 +44,7 @@ class PlanoSaudeStreamWriter:
 
             # 2. Escreve cada objeto da lista (Item 2.a.i)
             for plano in planos:
-                # Serializa o objeto POJO para bytes (usando seu método)
+                # Serializa o objeto POJO para bytes (usando nosso método)
                 plano_bytes = plano.to_bytes()
                 # Escreve os bytes do objeto no stream
                 self.stream.write(plano_bytes)

@@ -192,7 +192,7 @@ def handle_client_tcp(conn: socket.socket, addr):
 def main():
     # 1. Inicia a thread do timer da votação
     # (Definido para 120 segundos = 2 minutos)
-    timer_thread = threading.Thread(target=encerrar_votacao, args=(600,), daemon=True)
+    timer_thread = threading.Thread(target=encerrar_votacao, args=(120,), daemon=True)
     timer_thread.start()
 
     # 2. Configura e inicia o servidor TCP
