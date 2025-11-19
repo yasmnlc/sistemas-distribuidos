@@ -5,7 +5,7 @@ import json
 import sys
 
 # ------------------------------------------------------------------
-# 1. Classes do tipo POJO (Representam as informações do serviço)
+#    Classes do tipo POJO (Representam as informações do serviço)
 #    Usamos 'dataclass' para simplificar o POJO em Python.
 # -----------------------------------------------------------------
 
@@ -44,12 +44,18 @@ class PlanoEnfermaria(PlanoSaude):
     """Subclasse: Plano Enfermaria"""
     tipo_acomodacao: str = "Enfermaria"
 
+    @staticmethod
+    def from_dict(classname, d):
+        return PlanoEnfermaria(**d)
+
 @dataclass
 class PlanoApartamento(PlanoSaude):
     """Subclasse: Plano Apartamento"""
     tipo_acomodacao: str = "Apartamento"
 
-# Outras classes POJO (para um conjunto de qualquer POJO)
+    @staticmethod
+    def from_dict(classname, d):
+        return PlanoApartamento(**d)
 
 @dataclass
 class Vendas:
@@ -57,8 +63,16 @@ class Vendas:
     vendedor_nome: str
     plano_vendido: PlanoSaude
 
+    @staticmethod
+    def from_dict(classname, d):
+        return Vendas(**d)
+
 @dataclass
 class Cooperativa:
     """Classe Agregação: Cooperativa"""
     nome: str
     planos_oferecidos: List[PlanoSaude]
+
+    @staticmethod
+    def from_dict(classname, d):
+        return Cooperativa(**d)

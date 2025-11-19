@@ -1,20 +1,17 @@
 import Pyro5.api
-from Pyro5.api import SerializerBase # <-- 1. IMPORTAR SerializerBase
+from Pyro5.api import SerializerBase 
 from service import GestorPlanos
 from pojo import PlanoSaude, PlanoEmpresa, PlanoIndividual, Vendas, Cooperativa 
 
-# --- 2. BLOCO DE REGISTO DE CLASSES (MÉTODO CORRETO E DEFINITIVO) ---
-# Para cada classe POJO, dizemos ao Pyro como a transformar num dicionário
-# e como a recriar a partir de um dicionário.
-
-# O @dataclass já nos dá o __dict__ que precisamos, então a conversão é fácil.
+# --- BLOCO DE REGISTO DE CLASSES ---
+# Este bloco ensina o Pyro a converter os objetos para dicionários e vice-versa.
 SerializerBase.register_class_to_dict(PlanoSaude, lambda obj: obj.__dict__)
 SerializerBase.register_class_to_dict(PlanoEmpresa, lambda obj: obj.__dict__)
 SerializerBase.register_class_to_dict(PlanoIndividual, lambda obj: obj.__dict__)
 SerializerBase.register_class_to_dict(Vendas, lambda obj: obj.__dict__)
 SerializerBase.register_class_to_dict(Cooperativa, lambda obj: obj.__dict__)
 
-# Agora, o inverso: como criar um objeto a partir de um dicionário
+# Criar um objeto a partir de um dicionário
 SerializerBase.register_dict_to_class("pojo.PlanoSaude", PlanoSaude.from_dict)
 SerializerBase.register_dict_to_class("pojo.PlanoEmpresa", PlanoEmpresa.from_dict)
 SerializerBase.register_dict_to_class("pojo.PlanoIndividual", PlanoIndividual.from_dict)

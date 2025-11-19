@@ -14,17 +14,48 @@ class GestorPlanos:
 
     def adicionar_plano(self, plano: PlanoSaude) -> PlanoSaude:
         """Adiciona um novo plano ao sistema."""
+        
+        # --- CORREÇÃO DE ROBUSTEZ ---
+        # Se o 'plano' chegar como dicionário (erro de deserialização do Pyro),
+        # tentamos convertê-lo de volta para Objeto ou lidamos como dict.
+        if isinstance(plano, dict):
+            # Tenta converter baseado nos campos exclusivos
+            try:
+                if 'cnpj' in plano:
+                    plano = PlanoEmpresa(**plano)
+                elif 'cpf_titular' in plano:
+                    plano = PlanoIndividual(**plano)
+                else:
+                    plano = PlanoSaude(**plano)
+            except TypeError:
+                # Se falhar a conversão, mantemos como dict mas não deixamos crashar
+                pass
+        # -----------------------------
+
         self.last_codigo += 1
-        plano.codigo = self.last_codigo
+        
+        # Atribui o código (funciona se for objeto ou se ainda for dict)
+        if isinstance(plano, dict):
+            plano['codigo'] = self.last_codigo
+            nome_debug = plano.get('nome_plano', 'Desconhecido')
+            cod_debug = plano['codigo']
+        else:
+            plano.codigo = self.last_codigo
+            nome_debug = plano.nome_plano
+            cod_debug = plano.codigo
+
         self.planos_ativos.append(plano)
-        print(f"Plano '{plano.nome_plano}' adicionado com código {plano.codigo}.")
+        print(f"Plano '{nome_debug}' adicionado com código {cod_debug}.")
         return plano
 
     def buscar_plano_por_codigo(self, codigo: int) -> PlanoSaude | None:
         """Busca um plano pelo código."""
         print(f"Serviço: Buscando plano com código {codigo}.")
         for plano in self.planos_ativos:
-            if plano.codigo == codigo:
+            # Lê o código de forma segura (seja dict ou objeto)
+            p_cod = plano['codigo'] if isinstance(plano, dict) else plano.codigo
+            
+            if p_cod == codigo:
                 return plano
         return None
 
