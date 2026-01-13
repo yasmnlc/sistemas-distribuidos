@@ -8,8 +8,6 @@ app = FastAPI()
 gestor = GestorPlanos()
 
 # --- Adaptação dos POJOs para Pydantic (para validação automática na API) ---
-# O FastAPI prefere Pydantic, mas podemos aceitar dicts e converter manualmente
-# para reutilizar sua lógica do service.py que já trata dicts.
 
 class PlanoRequest(BaseModel):
     tipo: str  # "Empresa" ou "Individual"
